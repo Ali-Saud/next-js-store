@@ -1,17 +1,23 @@
-import {useRouter} from 'next/router';
-import data from '../../utils/data';
 import Layout from './../../components/Layout';
 import Image from 'next/image';
 import NextLink from 'next/link';
 import { Link, Grid, List, ListItem, Typography, Card, Button } from '@material-ui/core';
 import useStyles from '../../utils/styles';
+import Product from '../../models/Product';
+import db from '../../utils/db';
+//import {useRouter} from 'next/router';
+//import data from '../../utils/data';
 
 
-export default function ProductScreen() {
+
+export default function ProductScreen(props) {
+    const { product } = props;
     const classes = useStyles();
-    const router = useRouter();
-    const {slug} = router.query;
-    const product = data.products.find(a=> a.slug === slug);
+    // these are before mongoDB connection:
+    // also comment db and useRouter in imports
+    // const router = useRouter();
+    // const {slug} = router.query;
+    // const product = data.products.find(a=> a.slug === slug);
     if(!product) {
         return <div>Product Not Found</div>
     }
@@ -102,4 +108,18 @@ export default function ProductScreen() {
     </Layout>
     );
       
+}
+
+
+export async function getServerSideProps(context) {
+    const { params } = context;
+    const { slug } = params;
+  await db.connect();
+  const product = await Product.findOne({slug}).lean();
+  await db.disconnect();
+  return {
+    props: {
+      product: db.convertDocToObj(product)
+    },
+  }
 }
