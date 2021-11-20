@@ -61,7 +61,7 @@ const data = {
       description: "Popular & affordable pants ",
     },
     {
-      mane: "Classic Pants",
+      name: "Classic Pants",
       slug: "classic-pants",
       category: "Pants",
       image: "/images/pants3.jpg",
