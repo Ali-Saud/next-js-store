@@ -5,12 +5,19 @@ import { Link, Grid, List, ListItem, Typography, Card, Button } from '@material-
 import useStyles from '../../utils/styles';
 import Product from '../../models/Product';
 import db from '../../utils/db';
+import axios from 'axios';
+import { useContext } from 'react';
+import { Store }from '../../utils/Store';
+import {useRouter} from 'next/router';
+
 //import {useRouter} from 'next/router';
 //import data from '../../utils/data';
 
 
 
 export default function ProductScreen(props) {
+    const router = useRouter();
+    const { state, dispatch } = useContext(Store);
     const { product } = props;
     const classes = useStyles();
     // these are before mongoDB connection:
@@ -21,6 +28,23 @@ export default function ProductScreen(props) {
     if(!product) {
         return <div>Product Not Found</div>
     }
+
+    const addToCartHandler = async () => {
+
+        const existItem = state.cart.cartItems.find(x=> x._id === product._id);
+        const quantity = existItem ? existItem.quantity + 1 : 1;
+
+        const { data } = await axios.get(`/api/products/${product._id}`);
+        
+        if(data.countInStock < quantity) {
+            window.alert('Sorry, Product is out of stock');
+            return;
+        }
+        
+        dispatch({type: 'CART_ADD_ITEM', payload: {...product, quantity }});
+        router.push('/cart');
+    };
+
     return (
     <Layout title={product.name} description ={product.discription}>
         <div className={classes.section}>
@@ -36,7 +60,7 @@ export default function ProductScreen(props) {
             <Grid items md={6} xs={12}>
                 <Image src={product.image} alt={product.name} width={640} height={640} layout="responsive"></Image>
             </Grid>
-            <Grid item md={3} xs={12}>
+            <Grid item md={3} sm={6} xs={12}>
                 <List>
                     <ListItem>
                         <Typography component="h1" variant="h1">
@@ -60,7 +84,7 @@ export default function ProductScreen(props) {
                     </ListItem>
                     <ListItem>
                         <Typography>
-                            Description:{product.description}
+                            Description:<br />{product.description}
                         </Typography>
                     </ListItem>
                 </List>
@@ -97,7 +121,10 @@ export default function ProductScreen(props) {
                             </Grid>
                         </ListItem>
                         <ListItem>
-                            <Button fullWidth variant="contained" color="primary">
+                            <Button 
+                            fullWidth variant="contained"
+                            color="primary"
+                            onClick={addToCartHandler}>
                                 Add to Cart
                             </Button>
                         </ListItem>

@@ -13,16 +13,41 @@ import Layout from "../components/Layout";
 import NextLink from 'next/link';
 import Product from '../models/Product';
 import db from '../utils/db';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { useContext } from 'react';
+import { Store } from '../utils/Store';
+
 
 export default function Home(props) {
   const {products} = props;
+  const router = useRouter();
+  const { state, dispatch } = useContext(Store);
+
+
+  const addToCartHandler = async (product) => {
+        const existItem = state.cart.cartItems.find(x=> x._id === product._id);
+        const quantity = existItem ? existItem.quantity + 1 : 1;
+
+        const { data } = await axios.get(`/api/products/${product._id}`);
+        
+        if(data.countInStock < quantity) {
+            window.alert('Sorry, Product is out of stock');
+            return;
+        }
+
+        dispatch({type: 'CART_ADD_ITEM', payload: {...product, quantity }});
+        //router.push('/cart');
+    };
+
+
   return (
     <Layout>
       <div>
         <h1>Products</h1>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} alignItems="stretch">
           {products.map((product) => (
-            <Grid item md={3} key={product.name}>
+            <Grid item md={3} sm={6} xs={12} key={product.name} style={{display:'flex'}}>
               <Card>
                 <NextLink href ={`/product/${product.slug}`} passHref>
                   <CardActionArea>
@@ -36,10 +61,10 @@ export default function Home(props) {
                     </CardContent>
                   </CardActionArea>
                 </NextLink>
-                <CardActions>
+                <CardActions style={{display:'flex'}}>
                   <Typography>${product.price}</Typography>
-                  <Button size="small" color="primary">
-                    Add to cart
+                  <Button size="small" color="primary" onClick = { ()=> addToCartHandler(product)}>
+                    Add to Cart
                   </Button>
                 </CardActions>
               </Card>
