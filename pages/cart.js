@@ -41,10 +41,12 @@ function CartScreen() {
             </Typography>
             {cartItems.length === 0 ? 
             (<div>
-                Cart is Empty.
+                Cart is Empty.&nbsp;
+                <Button variant="contained" color="primary">
                 <NextLink href="/" passHref>
-                    <Link>Go Shopping</Link>
+                    <Link color="#000">Go Shopping</Link>
                 </NextLink>
+                </Button>
             </div>) : 
             (<Grid container spacing={1}>
                 <Grid item md={9} xs={12}>

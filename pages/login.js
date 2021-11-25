@@ -68,7 +68,7 @@ export default function Login () {
 
                     <ListItem>
                         Not Registerd? &nbsp;
-                        <NextLink href="/register" passHref>
+                        <NextLink href={`/register?redirect=${redirect || '/'}`} passHref>
                             <Link>
                                 Register
                             </Link>
