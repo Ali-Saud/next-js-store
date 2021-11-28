@@ -8,8 +8,9 @@ const initialState = {
     darkMode : Cookies.get('darkMode') === 'ON' ? true : false,
     cart: {
         cartItems: Cookies.get('cartItems') ? JSON.parse(Cookies.get('cartItems')) : [],
+        
+        shippingAddress: Cookies.get('shippingAddress') ? JSON.stringify(Cookies.get('shippingAddress')) : {},
     },
-    
     // userInfo: ()=> {
     //     let userInfo = null;
     //     try {
@@ -48,6 +49,10 @@ function reducer(state, action) {
 
         case 'USER_REGISTER':
             return { ...state, userInfo: action.payload };
+        
+        case 'SAVE_SHIPPING_ADDRESS':
+            return { ...state, cart: { ...state.cart, shippingAddress: action.payload}, 
+            };
         
         default:
             return state;

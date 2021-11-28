@@ -42,7 +42,7 @@ export default function Register () {
         try {        
         const { data } = await axios.post('/api/users/register', { name, email, password, confirmPassword });
         
-        //dispatch({ type: 'USER_REGISTER', payload: data});
+        dispatch({ type: 'USER_LOGIN', payload: data});
 
         Cookies.set('userInfo', data);
         router.push(redirect || '/');

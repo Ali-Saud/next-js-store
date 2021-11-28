@@ -1,6 +1,7 @@
 import Layout from '../components/Layout';
-import { Typography, List, ListItem, TextField, Button } from '@material-ui/core';
+import { Typography, List, ListItem, TextField, Button, Link } from '@material-ui/core';
 import useStyles from '../utils/styles';
+import NextLink from 'next/link';
 import { useContext, useEffect } from 'react';
 import { Store } from '../utils/Store';
 import { useRouter } from 'next/router';
@@ -12,6 +13,7 @@ import CheckoutWizard from '../components/CheckoutWizard';
 export default function Shipping(){
 
     const router = useRouter();
+    const { redirect } = router.query;
     const { state, dispatch } = useContext(Store);
     const { userInfo, 
             cart: { shippingAddress }, 
@@ -52,7 +54,7 @@ export default function Shipping(){
     };
     return (
         <Layout title="Shipping Address">
-            <CheckoutWizard activeStep={1} />
+            <CheckoutWizard activeStep={2} />
             <form onSubmit = {handleSubmit(submitHandler)} className= {classes.form}>
                 <Typography component="h1" variant="h1">
                     Shipping Address
