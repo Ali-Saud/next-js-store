@@ -9,7 +9,7 @@ const initialState = {
     cart: {
         cartItems: Cookies.get('cartItems') ? JSON.parse(Cookies.get('cartItems')) : [],
         
-        shippingAddress: Cookies.get('shippingAddress') ? JSON.stringify(Cookies.get('shippingAddress')) : {},
+        shippingAddress: Cookies.get('shippingAddress') ? Cookies.get('shippingAddress') : {},
 
         paymentMethod: Cookies.get('paymentMethod') ? Cookies.get('paymentMethod') : '',
     },
@@ -47,7 +47,7 @@ function reducer(state, action) {
         case 'USER_LOGIN':
             return { ...state, userInfo: action.payload };
         case 'USER_LOGOUT':
-            return { ...state, userInfo:null, cart: { cartItems: [] } };
+            return { ...state, userInfo:null, cart: { cartItems: [] , shippingAddress: {} } }; // I added shippingaddress
 
         case 'USER_REGISTER':
             return { ...state, userInfo: action.payload };
