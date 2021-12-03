@@ -17,7 +17,7 @@ function reducer(state, action) {
     switch (action.type) {
         case 'FETCH_REQUEST':
             return {
-                ...state, 
+                ...state,
                 loading: true,
                 error: ''
             };
@@ -50,12 +50,12 @@ function Order({params}) {
     const [{ loading, error, order }, dispatch ] = useReducer(reducer, { loading: true, order: {}, error: '' });
 
 
-    const { shippingAddress, 
-            paymentMethod, 
-            orderItems, 
-            itemsPrice, 
-            taxPrice, 
-            shippingPrice, 
+    const { shippingAddress,
+            paymentMethod,
+            orderItems,
+            itemsPrice,
+            taxPrice,
+            shippingPrice,
             totalPrice,
             isPaid,
             paidAt,
@@ -89,7 +89,6 @@ function Order({params}) {
 
     return (
         <Layout title={`Order ${orderId}`}>
-            <CheckoutWizard activeStep={3} />
             <Typography component="h1" variant="h1" >
                 Order {orderId}
             </Typography>

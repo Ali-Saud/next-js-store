@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import { useForm, Controller } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
+import { getError } from '../utils/error';
 
 
 
@@ -46,7 +47,7 @@ export default function Login () {
             router.push(redirect || '/');
         
             } catch(err) {
-                enqueueSnackbar(err.response.data ? err.response.data.message : err.message,{variant: 'error'});
+                enqueueSnackbar(getError(err),{variant: 'error'});
             }
         };
     return (
